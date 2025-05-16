@@ -33,38 +33,94 @@
     .menu-item button:hover {
       background-color: #218838;
     }
-    #cart-count {
-      background-color: #dc3545;
+    #cart {
+      margin-top: 30px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 30px auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    #cart ul {
+      list-style: none;
+      padding: 0;
+    }
+    #cart li {
+      margin: 5px 0;
+      text-align: right;
+    }
+    #sendBtn {
+      background-color: #25D366;
       color: white;
-      padding: 5px 10px;
-      border-radius: 50px;
-      display: inline-block;
-      margin-top: 10px;
+      padding: 10px 20px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #sendBtn:hover {
+      background-color: #1ebf5c;
     }
   </style>
 </head>
 <body>
+
   <h1>منيو المقصف</h1>
-  <div id="cart-count">السلة: 0</div>
 
   <div class="menu-item">
-    <h3>سندويش جبن</h3>
-    <p>5 ريال</p>
-    <button onclick="addToCart('سندويش جبن')">أضف إلى السلة</button>
+    <h3>ساندويتش جبن</h3>
+    <p>السعر: 5 ريال</p>
+    <button onclick="addToCart('ساندويتش جبن - 5 ريال')">أضف للسلة</button>
   </div>
 
   <div class="menu-item">
     <h3>عصير برتقال</h3>
-    <p>3 ريال</p>
-    <button onclick="addToCart('عصير برتقال')">أضف إلى السلة</button>
+    <p>السعر: 3 ريال</p>
+    <button onclick="addToCart('عصير برتقال - 3 ريال')">أضف للسلة</button>
+  </div>
+
+  <div class="menu-item">
+    <h3>ماء بارد</h3>
+    <p>السعر: 1 ريال</p>
+    <button onclick="addToCart('ماء بارد - 1 ريال')">أضف للسلة</button>
+  </div>
+
+  <div id="cart">
+    <h2>سلة المشتريات</h2>
+    <ul id="cartList"></ul>
+    <button id="sendBtn" onclick="sendOrder()">إرسال الطلب عبر واتساب</button>
   </div>
 
   <script>
-    let cart = [];
+    const cart = [];
+
     function addToCart(item) {
       cart.push(item);
-      document.getElementById("cart-count").textContent = "السلة: " + cart.length;
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartList = document.getElementById('cartList');
+      cartList.innerHTML = '';
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        cartList.appendChild(li);
+      });
+    }
+
+    function sendOrder() {
+      if (cart.length === 0) {
+        alert('السلة فارغة!');
+        return;
+      }
+      const message = `طلب من المقصف:%0A` + cart.map((item, i) => `${i + 1}- ${item}`).join('%0A');
+      const phoneNumber = "9665XXXXXXXX"; // ← استبدل هذا برقم واتساب مسؤول المقصف
+      const url = `https://wa.me/${phoneNumber}?text=${message}`;
+      window.open(url, '_blank');
     }
   </script>
+
 </body>
 </html>
